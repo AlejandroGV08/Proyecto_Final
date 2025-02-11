@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
 import requests
-import os
 from jose import JWTError, jwt
 from fastapi.security import OAuth2PasswordBearer
 
@@ -28,9 +27,13 @@ def obtener_clima(ciudad: str, usuario: str = Depends(verify_token)):
         raise HTTPException(status_code=404, detail="Ciudad no encontrada")
 
     data = response.json()
-    return {
+    clima_actual = {
         "ciudad": ciudad,
         "temperatura": data["main"]["temp"],
         "humedad": data["main"]["humidity"],
         "descripcion": data["weather"][0]["description"]
+    }
+
+    return {
+        "clima_actual": clima_actual
     }
